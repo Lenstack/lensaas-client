@@ -1,4 +1,4 @@
-import {createContext, ReactNode, useEffect, useState} from "react";
+import {createContext, ReactNode, useEffect, useMemo, useState} from "react";
 import {
     signInWithCredentialsService,
     signInWithOauthService,
@@ -12,6 +12,7 @@ interface User {
     displayName: string;
     photoURL: string;
 }
+
 interface Auth {
     user: User | null;
     loading: boolean;
@@ -21,6 +22,7 @@ interface Auth {
         signUp: ({name, email, password}: { name: string, email: string, password: string }) => Promise<any>;
     }
 }
+
 interface Provider {
     type: "credentials" | "oauth";
     action: {
@@ -28,6 +30,7 @@ interface Provider {
         oauth?: "google" | "facebook" | "discord" | "github" | "twitter" | "apple" | "microsoft";
     }
 }
+
 export const AuthContext = createContext({
     user: null,
     loading: true,
@@ -46,7 +49,7 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     const signIn = async ({type, action}: Provider) => {
-        // TODO: If provider is credentials, then call signInWithCredentials otherwise call signUpWithOauth
+
         if (type === "credentials") {
             if (!action.credentials?.email || !action?.credentials?.password) {
                 throw new Error("Email and password are required for credentials authentication");
@@ -90,8 +93,10 @@ export const AuthProvider = ({children}: { children: ReactNode }) => {
         };
     }, []);
 
+    const value = useMemo(() => ({user, loading, action: {signIn, signUp, signOut}}), [user, loading]);
+
     return (
-        <AuthContext.Provider value={{user, loading, action: {signIn, signUp, signOut}} as Auth}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     )
