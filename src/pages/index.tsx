@@ -50,7 +50,7 @@ export default function HomePage() {
                     </div>
                     <div className="grid grid-cols-2 items-center justify-items-center">
                         <input placeholder="Enter your email"
-                               className="w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"/>
+                               className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"/>
 
                         <Link href="/authentication" className="underline">
                             Join the waitlist
