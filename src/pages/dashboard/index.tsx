@@ -1,12 +1,12 @@
-
 import {GetServerSideProps} from "next";
 import {getSession} from "@/utils";
+import {LayoutDashboard} from "@/layouts";
 
 export default function DashboardPage() {
     return (
-        <main className="min-h-screen max-w-6xl mx-auto p-6">
-            dashboard
-        </main>
+        <LayoutDashboard>
+            <h1>Dashboard</h1>
+        </LayoutDashboard>
     )
 }
 
