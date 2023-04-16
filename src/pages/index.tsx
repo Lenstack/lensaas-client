@@ -6,12 +6,12 @@ export default function HomePage() {
         <LayoutLanding>
             <section className="py-20 text-center space-y-12">
                 <div className="space-y-6">
-                    <h1 className="text-6xl">
+                    <h1 className="text-6xl break-words">
                         The most powerful <span className="pl-2 bg-gradient-to-r from-[#eb7d55]">template</span> for
                         your
                         next project.
                     </h1>
-                    <p className="text-2xl text-primary-light dark:text-primary-dark">
+                    <p className="text-2xl break-words text-primary-light dark:text-primary-dark">
                         Created with modern technologies like Next.js, TailwindCSS, <span
                         className="pl-2 bg-gradient-to-r from-[#5b4eed]">Golang</span> and more...
                     </p>

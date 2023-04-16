@@ -1,33 +1,31 @@
 import {LayoutAuthentication} from "@/layouts";
 import {TabList} from "@/components";
 import {useAuth} from "@/hooks";
+import {useState} from "react";
 
 export default function AuthenticationPage() {
     const tabs = [
         {
-            title: "Credentials (Email & Password)",
+            title: "Credentials",
             content: <Credentials/>
         },
         {
-            title: "OAuth 2.0 (Google, Facebook, Discord)",
+            title: "OAuth 2.0",
             content: <OAuth/>
         },
         {
-            title: "Magic Link (Email)",
+            title: "Magic Link",
             content: <MagicLink/>
         }
     ]
 
     return (
         <LayoutAuthentication>
-            <section className="flex flex-col justify-center items-center align-middle text-center gap-12">
-                <div>
-                    <h1 className="text-3xl">
+            <section className="flex flex-col justify-center items-center align-middle gap-12">
+                <div className="text-center">
+                    <h1 className="text-3xl break-words">
                         Choose your authentication method below to sign in
                     </h1>
-                    <p>
-                        You can use your credentials, Google OAuth 2.0 or Magic Link
-                    </p>
                 </div>
                 <TabList tabs={tabs}/>
             </section>
@@ -37,40 +35,140 @@ export default function AuthenticationPage() {
 
 
 const Credentials = () => {
+    const [credentialStep, setCredentialStep] = useState(0);
+    const [hasAccount, setHasAccount] = useState(false);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSignIn = (e: any) => {
+        e.preventDefault();
+        // Check if the user has an account based on their email address
+        const hasAccount = checkAccountExists(email);
+        setHasAccount(hasAccount);
+    };
+
+    const handleSignUp = (e: any) => {
+        e.preventDefault();
+        // Handle sign-up logic
+    };
+
+    const checkAccountExists = (email: string) => {
+        // Replace with your own logic to check if the user has an account
+        return email !== '';
+    };
+
     return (
         <div>
-            <form>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Email"/>
-                </div>
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Password"/>
-                </div>
-                <div>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl">
-                        Sign in
-                    </button>
-                </div>
-            </form>
+            {
+                credentialStep === 0 ? (
+                    <form onSubmit={handleSignIn} className="flex flex-col gap-6">
+                        <div className="space-y-6">
+                            <label htmlFor="email">Your email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Email"
+                                className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"
+                                value={email}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                        <div className="space-y-6">
+                            <button
+                                className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl w-full"
+                                type="submit"
+                            >
+                                has an account with this email
+                            </button>
+                        </div>
+                    </form>
+                ) : credentialStep === 1 && hasAccount ? (
+                    <form onSubmit={handleSignIn} className="flex flex-col gap-6">
+                        <div className="space-y-6">
+                            <label htmlFor="password">Your password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Password"
+                                className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"
+
+                            />
+                        </div>
+                        <div className="space-y-6">
+                            <button
+                                className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl w-full"
+                                type="submit"
+                            >
+                                Sign in with credentials
+                            </button>
+                        </div>
+                    </form>
+                ) : (
+                    <form onSubmit={handleSignUp} className="flex flex-col gap-6">
+                        <div className="space-y-6">
+                            <label htmlFor="password">Your name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                placeholder="Name"
+                                className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"
+
+                            />
+                        </div>
+                        <div className="space-y-6">
+                            <label htmlFor="password">Your email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Email"
+                                className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"
+                            />
+                        </div>
+                        <div className="space-y-6">
+                            <label htmlFor="password">Your password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Password"
+                                className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"
+                            />
+                        </div>
+                        <div className="space-y-6">
+                            <button
+                                className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl w-full"
+                                type="submit"
+                            >
+                                Sign up with credentials
+                            </button>
+                        </div>
+                    </form>
+                )
+            }
         </div>
-    )
-}
+    );
+};
 
 const OAuth = () => {
     const {action} = useAuth();
     return (
         <div className="flex flex-col gap-6">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl"
+            <div className="flex flex-col gap-6 pb-6">
+                <p className="text-xl"> Choose your social provider below to sign in </p>
+            </div>
+            <button className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl"
                     onClick={() => action.signIn({type: "oauth", action: {oauth: "google"}})}>
                 Sign in with Google
             </button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl"
+            <button className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl"
                     onClick={() => action.signIn({type: "oauth", action: {oauth: "facebook"}})}>
                 Sign in with Facebook
             </button>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl"
+            <button className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl"
                     onClick={() => action.signIn({type: "oauth", action: {oauth: "discord"}})}>
                 Sign in with Discord
             </button>
@@ -79,16 +177,25 @@ const OAuth = () => {
 }
 
 const MagicLink = () => {
+    const handleSendMagicLink = (e: any) => {
+        e.preventDefault()
+        console.log("Send magic link")
+    }
+
     return (
         <div>
-            <h1>Magic Link</h1>
-            <form>
-                <div>
-                    <label htmlFor="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Email"/>
+            <div className="flex flex-col gap-6 pb-6">
+                <p className="text-xl"> Your email below to receive a magic link </p>
+            </div>
+            <form onSubmit={handleSendMagicLink} className="flex flex-col gap-6">
+                <div className="space-y-6">
+                    <label htmlFor="email">Your email</label>
+                    <input type="email" id="email" name="email" placeholder="Email"
+                           className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"/>
                 </div>
                 <div>
-                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-2xl">
+                    <button className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl w-full"
+                            type="submit">
                         Send Magic Link
                     </button>
                 </div>
