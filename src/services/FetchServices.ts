@@ -1,4 +1,4 @@
-const URL = process.env.API_URL || "http://localhost:3000";
+const URL = process.env.API_URL || "http://localhost:3000/v1";
 const getFromEndpoint = async ({endpoint, method, headers, body}: {
     endpoint: string,
     method: "GET" | "POST" | "PUT" | "DELETE",

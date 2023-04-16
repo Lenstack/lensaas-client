@@ -2,6 +2,7 @@ import {LayoutAuthentication} from "@/layouts";
 import {TabList} from "@/components";
 import {useAuth} from "@/hooks";
 import {useState} from "react";
+import {useRouter} from "next/router";
 
 export default function AuthenticationPage() {
     const tabs = [
@@ -59,6 +60,9 @@ const Credentials = () => {
 
     return (
         <div>
+            <div className="flex flex-col gap-6 pb-6">
+                <p className="text-xl"> Sign in or sign up with your credentials </p>
+            </div>
             {
                 credentialStep === 0 ? (
                     <form onSubmit={handleSignIn} className="flex flex-col gap-6">
@@ -79,7 +83,7 @@ const Credentials = () => {
                                 className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl w-full"
                                 type="submit"
                             >
-                                has an account with this email
+                                next &rarr;
                             </button>
                         </div>
                     </form>
@@ -154,22 +158,38 @@ const Credentials = () => {
 };
 
 const OAuth = () => {
+    const router = useRouter();
     const {action} = useAuth();
+    const handleOAuthGoogle = async (e: any) => {
+        const {redirect_url} = await action.signIn({type: "oauth", action: {oauth: "google"}})
+        await router.replace(redirect_url)
+    }
+
+    const handleOAuthFacebook = async (e: any) => {
+        const {redirect_url} = await action.signIn({type: "oauth", action: {oauth: "facebook"}})
+        await router.replace(redirect_url)
+    }
+
+    const handleOAuthDiscord = async (e: any) => {
+        const {redirect_url} = await action.signIn({type: "oauth", action: {oauth: "discord"}})
+        await router.replace(redirect_url)
+    }
+
     return (
         <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-6 pb-6">
                 <p className="text-xl"> Choose your social provider below to sign in </p>
             </div>
             <button className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl"
-                    onClick={() => action.signIn({type: "oauth", action: {oauth: "google"}})}>
+                    onClick={handleOAuthGoogle}>
                 Sign in with Google
             </button>
             <button className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl"
-                    onClick={() => action.signIn({type: "oauth", action: {oauth: "facebook"}})}>
+                    onClick={handleOAuthFacebook}>
                 Sign in with Facebook
             </button>
             <button className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl"
-                    onClick={() => action.signIn({type: "oauth", action: {oauth: "discord"}})}>
+                    onClick={handleOAuthDiscord}>
                 Sign in with Discord
             </button>
         </div>
