@@ -36,6 +36,7 @@ export default function AuthenticationPage() {
 
 
 const Credentials = () => {
+    const {action} = useAuth();
     const [credentialStep, setCredentialStep] = useState(0);
     const [hasAccount, setHasAccount] = useState(false);
     const [email, setEmail] = useState('');
@@ -48,8 +49,11 @@ const Credentials = () => {
         setHasAccount(hasAccount);
     };
 
-    const handleSignUp = (e: any) => {
+    const handleSignUp = async (e: any) => {
         e.preventDefault();
+
+        const response = await action.signUp({"name": "John Doe", "email": "email", "password": "password"});
+        console.log(response);
         // Handle sign-up logic
     };
 
