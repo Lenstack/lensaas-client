@@ -44,9 +44,13 @@ const Credentials = () => {
 
     const handleSignIn = (e: any) => {
         e.preventDefault();
-        // Check if the user has an account based on their email address
-        const hasAccount = checkAccountExists(email);
-        setHasAccount(hasAccount);
+
+        if (credentialStep === 0) {
+            // Check if the user has an account based on their email address
+            const hasAccount = checkAccountExists(email);
+            setHasAccount(hasAccount);
+            setCredentialStep(1);
+        }
     };
 
     const handleSignUp = async (e: any) => {
@@ -111,6 +115,13 @@ const Credentials = () => {
                             >
                                 Sign in with credentials
                             </button>
+                            <button
+                                className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl w-full"
+                                type="button"
+                                onClick={() => setCredentialStep(0)}
+                            >
+                                &larr; back
+                            </button>
                         </div>
                     </form>
                 ) : (
@@ -152,6 +163,13 @@ const Credentials = () => {
                                 type="submit"
                             >
                                 Sign up with credentials
+                            </button>
+                            <button
+                                className="border border-[#151515] dark:border-[#393939] px-6 py-3 rounded-2xl w-full"
+                                type="button"
+                                onClick={() => setCredentialStep(0)}
+                            >
+                                &larr; back
                             </button>
                         </div>
                     </form>

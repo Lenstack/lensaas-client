@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const URL = process.env.API_URL || "http://localhost:3000/v1";
 const getFromEndpoint = async ({endpoint, method, headers, body}: {
     endpoint: string,
@@ -6,17 +8,19 @@ const getFromEndpoint = async ({endpoint, method, headers, body}: {
     body?: any
 }) => {
     try {
-        const response = await fetch(URL + endpoint, {
+        const response = await axios({
             method: method,
-            headers: headers,
-            body: JSON.stringify(body),
-            credentials: "include",
+            url: URL + endpoint,
+            data: JSON.stringify(body),
+            withCredentials: true,
+            headers: headers
         });
 
-        if (!response.ok) {
-            Error(`Request failed with status ${response.status}`);
+        if (response.status >= 400) {
+            console.error(response.data);
         }
-        return await response.json();
+
+        return await response.data;
     } catch (e) {
         console.log(e);
         throw e;
@@ -24,10 +28,7 @@ const getFromEndpoint = async ({endpoint, method, headers, body}: {
 }
 
 export const getMeService = async () => await getFromEndpoint({
-    endpoint: "/me", method: "GET", headers: {
-        "Content-Type": "application/json",
-        withCredentials: true
-    }
+    endpoint: "/me", method: "GET", headers: {}
 })
 
 export const signInWithCredentialsService = async ({email, password}: {
@@ -42,7 +43,9 @@ export const signInWithOauthService = async ({provider}: { provider: string }) =
 })
 
 export const signOutService = async () => await getFromEndpoint({
-    endpoint: "/authentication/sign_out", method: "POST", headers: {}
+    endpoint: "/authentication/sign_out", method: "POST", headers: {
+        withCredentials: true
+    }
 })
 
 export const signUpWithCredentialsService = async ({name, email, password}: {
