@@ -1,6 +1,6 @@
 import {LayoutAuthentication} from "@/layouts";
 import {TabList} from "@/components";
-import {useAuth} from "@/hooks";
+import {useAuth, useForm} from "@/hooks";
 import {useState} from "react";
 import {useRouter} from "next/router";
 
@@ -39,15 +39,33 @@ const Credentials = () => {
     const {action} = useAuth();
     const [credentialStep, setCredentialStep] = useState(0);
     const [hasAccount, setHasAccount] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+
+    const {handleBlur, handleChange, handleSubmit} = useForm({
+        email: '',
+        password: '',
+    }, {
+        name: (value: string) => {
+            if (!value) return "Name is required";
+        },
+        email: (value: string) => {
+            if (!value) return "Email is required";
+            if (!/\S+@\S+\.\S+/.test(value)) return "Email address is invalid";
+        },
+        password: (value: string) => {
+            if (!value) return "Password is required";
+            if (value.length < 6) return "Password must be at least 6 characters";
+        },
+    }, (values: any) => {
+        // Handle sign-in logic
+    })
+
 
     const handleSignIn = (e: any) => {
         e.preventDefault();
 
         if (credentialStep === 0) {
             // Check if the user has an account based on their email address
-            const hasAccount = checkAccountExists(email);
+            const hasAccount = checkAccountExists("email");
             setHasAccount(hasAccount);
             setCredentialStep(1);
         }
@@ -82,8 +100,8 @@ const Credentials = () => {
                                 name="email"
                                 placeholder="Email"
                                 className="focus:outline-none w-full p-3 rounded-2xl bg-white dark:bg-[#2A2A2A] placeholder:text-black dark:placeholder:text-white"
-                                value={email}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
                             />
                         </div>
                         <div className="space-y-6">

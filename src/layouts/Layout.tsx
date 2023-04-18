@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import LogoLightSvg from "@/assets/logo-light.svg";
 import {Navigation} from "@/components/Navigation";
-import {HOME_HEADER_ROUTES} from "@/constants";
+import {DASHBOARD_ROUTES, HOME_HEADER_ROUTES} from "@/constants";
 import {ReactNode} from "react";
 
 export const LayoutLanding = ({children}: { children: ReactNode }) => {
@@ -47,7 +47,17 @@ export const LayoutAuthentication = ({children}: { children: ReactNode }) => {
 export const LayoutDashboard = ({children}: { children: ReactNode }) => {
     return (
         <main className="min-h-screen max-w-6xl mx-auto p-6">
-            <header className="flex justify-between items-center h-24 py-3">
+            <header
+                className="flex justify-between items-center h-24 py-3 border-b border-[#151515] dark:border-[#393939] overflow-auto">
+                <div className="flex items-center gap-6">
+                    <Link href="/">
+                        <Image src={LogoLightSvg} alt="Logo" width={50} height={50}/>
+                    </Link>
+                    <Navigation items={DASHBOARD_ROUTES} className="space-x-6"/>
+                </div>
+                <Link href={"/authentication"}>
+                    Sign out
+                </Link>
             </header>
             {children}
         </main>

@@ -20,5 +20,13 @@ export const AUTH_ROUTES: { title: string, subtitle: string, description?: strin
 ]
 
 export const DASHBOARD_ROUTES: { name: string, href: string }[] = [
-    {name: "Sign Out", href: "/"}
+    {name: "Contracts", href: "/"},
+    {name: "Signatures", href: "/"},
+    {name: "Payment Tracking", href: "/"},
+    {name: "Users", href: "/"},
+    {name: "Reminders", href: "/"},
+    {name: "Templates", href: "/"},
+    {name: "Reports", href: "/"},
+    {name: "Settings", href: "/"},
+
 ]

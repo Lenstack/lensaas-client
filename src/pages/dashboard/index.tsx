@@ -12,11 +12,7 @@ export default function DashboardPage() {
 
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const {req, res} = context;
-    const session = await getSession({req});
-
-    console.log(session)
-
+    const session = await getSession(context);
     if (!session) {
         return {
             redirect: {
@@ -25,7 +21,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             },
         }
     }
-
     return {
         props: {}
     }
